@@ -151,7 +151,7 @@ train_arima <- function(.data, specials,
     )
 
     if (!is.null(new)) {
-      nstar <- length(y) - d - D * period
+      nstar <- new$nobs
       npar <- length(new$coef[new$mask]) + 1
       if (method == "CSS") {
         new$aic <- offset + nstar * log(new$sigma2) + 2 * npar
@@ -164,7 +164,7 @@ train_arima <- function(.data, specials,
         new$aic <- new$bic <- new$aicc <- new$ic <- Inf
       }
       # Adjust residual variance to be unbiased
-      new$sigma2 <- sum(new$residuals^2, na.rm = TRUE) / (nstar - npar + 1)
+      new$sigma2 <- sum(new$residuals^2, na.rm = TRUE) / (nstar - npar)
 
       # If automatically selecting a model
       if (NROW(model_opts) > 1) {
